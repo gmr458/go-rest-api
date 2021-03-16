@@ -16,6 +16,10 @@ type Data struct {
 	Errors  []string      `json:"errors"`
 }
 
+type Message struct {
+	Message string `json:"message"`
+}
+
 func CreateTodo(w http.ResponseWriter, req *http.Request) {
 	bodyTodo, success := helpers.DecodeBody(req)
 	if !success {
@@ -65,6 +69,15 @@ func GetTodo(w http.ResponseWriter, req *http.Request) {
 	data.Success = true
 	data.Data = append(data.Data, todo)
 	json, _ := json.Marshal(data)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(json)
+}
+
+func Home(w http.ResponseWriter, req *http.Request) {
+	var res Message
+	res.Message = "Home"
+	json, _ := json.Marshal(res)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(json)
